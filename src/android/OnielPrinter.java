@@ -347,6 +347,7 @@ public class OnielPrinter extends CordovaPlugin {
       // to give buffer to roll the paper to the end
       docEZ.writeText("  ", 200, 1500);
       conn.write(docEZ.getDocumentData());
+      Thread.sleep(1000);
       conn.close();
       callbackContext.success("Print done");
 
