@@ -47,7 +47,16 @@ public class OnielPrinter extends CordovaPlugin {
       return true;
     }
     else if("getPairedDevices".equals(action)) {
-      getPairedDevices(callbackContext);
+      cordova.getThreadPool().execute(new Runnable() {
+        public void run() {
+          try {
+            getPairedDevices(callbackContext);
+          } catch (JSONException e) {
+            e.printStackTrace();
+          }
+        }
+      });
+      return true;
     }
     else if ("setLandscape".equals(action)) {
       setLandscape(args.getBoolean(0), callbackContext);
@@ -58,7 +67,15 @@ public class OnielPrinter extends CordovaPlugin {
       return true;
     }
     else if ("printTextObj".equals(action)) {
-      printTextObj(args.getJSONArray(0), args.getString(1), args.getBoolean(2), callbackContext);
+     cordova.getThreadPool().execute(new Runnable() {
+        public void run() {
+          try {
+            printTextObj(args.getJSONArray(0), args.getString(1), args.getBoolean(2), callbackContext);
+          } catch (JSONException e) {
+            e.printStackTrace();
+          }
+        }
+      });
       return true;
     }
 
