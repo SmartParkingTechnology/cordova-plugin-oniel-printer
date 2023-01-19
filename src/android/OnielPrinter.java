@@ -19,6 +19,7 @@ import android.bluetooth.BluetoothDevice;
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.lang.Thread;
 
 import datamaxoneil.connection.ConnectionBase;
 import datamaxoneil.connection.Connection_Bluetooth;
@@ -313,13 +314,6 @@ public class OnielPrinter extends CordovaPlugin {
   }
 
   private void printTextObj(JSONArray printTextObj, String address, Boolean isLandscape, CallbackContext callbackContext) {
-     final ProgressDialog progress = new ProgressDialog(webView.getContext());
-     progress.setTitle("Connecting");
-     progress.setMessage("Please wait while we connect to devices...");
-     progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-     progress.setCanceledOnTouchOutside(false);
-     progress.show();
-
     try {
       conn = Connection_Bluetooth.createClient(address);
       conn.open();
@@ -354,7 +348,6 @@ public class OnielPrinter extends CordovaPlugin {
       docEZ.writeText("  ", 200, 1500);
       conn.write(docEZ.getDocumentData());
       conn.close();
-      progress.dismiss();
       callbackContext.success("Print done");
 
     } catch (Exception e) {
@@ -364,15 +357,5 @@ public class OnielPrinter extends CordovaPlugin {
       e.printStackTrace();
       callbackContext.error("Unable to print: " + e);
     }
-
-    Runnable progressRunnable = new Runnable() {
-      @Override
-      public void run() {
-        progress.dismiss();
-      }
-    };
-
-    Handler pdCanceller = new Handler();
-    pdCanceller.postDelayed(progressRunnable, 3000);
   }
 }
